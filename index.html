@@ -2,22 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Google Classroom</title>
+  <title>Google Docs</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" id="tabIcon" href="https://ssl.gstatic.com/classroom/favicon.png">
+  <link rel="icon" id="tabIcon" href="https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico">
 </head>
 
 <body>
 
-<div class="browser">
-  <div class="topbar">
-    <input id="urlInput" placeholder="Search or enter URL...">
-    <button onclick="go()">Go</button>
-    <button onclick="toggleStealth()">Stealth</button>
-  </div>
+<!-- Tabs -->
+<div class="tabs" id="tabs"></div>
 
-  <iframe id="frame" src="https://example.com"></iframe>
+<!-- Top Bar -->
+<div class="topbar">
+  <button onclick="newTab()">＋</button>
+  <input id="urlInput" placeholder="Search or enter URL...">
+  <button onclick="go()">Go</button>
+  <button onclick="cloak('classroom')">🎓</button>
+  <button onclick="cloak('docs')">📄</button>
 </div>
+
+<!-- Bookmarks -->
+<div class="bookmarks">
+  <button onclick="quick('https://google.com')">Google</button>
+  <button onclick="quick('https://youtube.com')">YouTube</button>
+  <button onclick="quick('https://discord.com')">Discord</button>
+</div>
+
+<!-- Browser View -->
+<iframe id="frame"></iframe>
 
 <script src="script.js"></script>
 </body>
