@@ -4,6 +4,9 @@ const tabsDiv = document.getElementById("tabs");
 let tabs = [];
 let currentTab = 0;
 
+// 🔥 PUT YOUR WORKER URL HERE
+const proxy = "https://spring-shadow-dd89.awsomemathgamesteam.workers.dev/";
+
 // Create new tab
 function newTab(url = "https://example.com") {
   tabs.push(url);
@@ -36,7 +39,7 @@ function loadTab() {
   frame.src = tabs[currentTab];
 }
 
-// Go button
+// 🔥 SMART GO FUNCTION (proxy + fallback)
 function go() {
   let input = document.getElementById("urlInput").value.trim();
 
@@ -44,12 +47,36 @@ function go() {
     input = "https://www.google.com/search?q=" + encodeURIComponent(input);
   }
 
-  const blocked = ["google.com", "youtube.com", "discord.com"];
+  tabs[currentTab] = input;
 
-  if (blocked.some(site => input.includes(site))) {
-    window.open(input, "_blank"); // 🔥 opens normally
-  } else {
-    tabs[currentTab] = input;
-    loadTab();
-  }
+  const proxied = proxy + "/?url=" + encodeURIComponent(input);
+
+  loadWithFallback(proxied, input);
 }
+
+// 🔥 PROXY FALLBACK SYSTEM
+function loadWithFallback(proxyUrl, originalUrl) {
+  let failed = false;
+
+  frame.src = proxyUrl;
+
+  const timeout = setTimeout(() => {
+    failed = true;
+    window.open(originalUrl, "_blank");
+  }, 4000);
+
+  frame.onload = () => {
+    if (!failed) {
+      clearTimeout(timeout);
+    }
+  };
+}
+
+// Quick bookmarks
+function quick(url) {
+  tabs[currentTab] = url;
+  loadWithFallback(proxy + "/?url=" + encodeURIComponent(url), url);
+}
+
+// Start with one tab
+newTab();
