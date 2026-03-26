@@ -1,7 +1,42 @@
 const frame = document.getElementById("frame");
+const tabsDiv = document.getElementById("tabs");
 
-const proxy = "https://your-worker.workers.dev";
+let tabs = [];
+let currentTab = 0;
 
+// Create new tab
+function newTab(url = "https://example.com") {
+  tabs.push(url);
+  currentTab = tabs.length - 1;
+  renderTabs();
+  loadTab();
+}
+
+// Switch tab
+function switchTab(index) {
+  currentTab = index;
+  loadTab();
+  renderTabs();
+}
+
+// Render tabs UI
+function renderTabs() {
+  tabsDiv.innerHTML = "";
+  tabs.forEach((tab, i) => {
+    const el = document.createElement("div");
+    el.className = "tab " + (i === currentTab ? "active" : "");
+    el.innerText = "Tab " + (i + 1);
+    el.onclick = () => switchTab(i);
+    tabsDiv.appendChild(el);
+  });
+}
+
+// Load current tab
+function loadTab() {
+  frame.src = tabs[currentTab];
+}
+
+// Go button
 function go() {
   let input = document.getElementById("urlInput").value.trim();
 
@@ -9,5 +44,29 @@ function go() {
     input = "https://www.google.com/search?q=" + encodeURIComponent(input);
   }
 
-  frame.src = proxy + "/?url=" + encodeURIComponent(input);
+  tabs[currentTab] = input;
+  loadTab();
 }
+
+// Quick bookmarks
+function quick(url) {
+  tabs[currentTab] = url;
+  loadTab();
+}
+
+// Tab cloaking
+function cloak(type) {
+  if (type === "classroom") {
+    document.title = "Google Classroom";
+    document.getElementById("tabIcon").href =
+      "https://ssl.gstatic.com/classroom/favicon.png";
+  }
+  if (type === "docs") {
+    document.title = "Google Docs";
+    document.getElementById("tabIcon").href =
+      "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico";
+  }
+}
+
+// Start with one tab
+newTab();
