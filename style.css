@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #1e1e1e;
+}
+
+.browser {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  padding: 10px;
+  background: #2a2a2a;
+}
+
+.topbar input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+.topbar button {
+  margin-left: 10px;
+  padding: 10px;
+  border: none;
+  background: #4caf50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+iframe {
+  flex: 1;
+  border: none;
+  width: 100%;
+}
