@@ -49,8 +49,8 @@ function go() {
 
   tabs[currentTab] = input;
 
-  const proxied = proxy + "/?url=" + encodeURIComponent(input);
-
+const proxied = proxy + "/proxy/" + btoa(input);
+  
   loadWithFallback(proxied, input);
 }
 
@@ -75,8 +75,7 @@ function loadWithFallback(proxyUrl, originalUrl) {
 // Quick bookmarks
 function quick(url) {
   tabs[currentTab] = url;
-  loadWithFallback(proxy + "/?url=" + encodeURIComponent(url), url);
+  loadWithFallback(proxy + "/proxy/" + btoa(url), url);
 }
-
 // Start with one tab
 newTab();
