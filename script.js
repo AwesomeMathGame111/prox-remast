@@ -4,6 +4,8 @@ const tabsDiv = document.getElementById("tabs");
 let tabs = [];
 let currentTab = 0;
 
+const proxy = "https://your-worker.workers.dev";
+
 // Create new tab
 function newTab(url = "https://example.com") {
   tabs.push(url);
@@ -44,27 +46,28 @@ function go() {
     input = "https://www.google.com/search?q=" + encodeURIComponent(input);
   }
 
-  const blocked = ["google.com", "youtube.com", "discord.com"];
+  // 🔥 create proxied version
+  const proxied = proxy + "/proxy/" + btoa(input);
 
-  if (blocked.some(site => input.includes(site))) {
-    window.open(input, "_blank");
-  } else {
-    tabs[currentTab] = input;
-    loadTab();
-  }
-}
+  // save tab
+  tabs[currentTab] = input;
 
-// Quick bookmarks
-function quick(url) {
-  tabs[currentTab] = url;
+  // 🔥 use proxy with fallback
+function loadWithFallback(proxyUrl, originalUrl) {
+  let failed = false;
 
-  const blocked = ["google.com", "youtube.com", "discord.com"];
+  frame.src = proxyUrl;
 
-  if (blocked.some(site => url.includes(site))) {
-    window.open(url, "_blank");
-  } else {
-    loadTab();
-  }
+  const timeout = setTimeout(() => {
+    failed = true;
+    window.open(originalUrl, "_blank");
+  }, 4000);
+
+  frame.onload = () => {
+    if (!failed) {
+      clearTimeout(timeout);
+    }
+  };
 }
 
 // Tab cloaking
