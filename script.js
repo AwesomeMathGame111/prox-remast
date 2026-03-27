@@ -53,3 +53,21 @@ function go() {
   tabs[currentTab] = input;
   loadTab();
 }
+// 🕶️ Cloaker presets
+
+function cloakGoogle() {
+  document.title = "Google";
+  document.getElementById("favicon").href =
+    "https://www.google.com/favicon.ico";
+}
+
+function cloakClassroom() {
+  document.title = "Classes";
+  document.getElementById("favicon").href =
+    "https://ssl.gstatic.com/classroom/favicon.png";
+}
+
+function cloakReset() {
+  document.title = "My Browser";
+  document.getElementById("favicon").href = "";
+}
