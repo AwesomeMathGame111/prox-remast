@@ -4,7 +4,7 @@ const tabsDiv = document.getElementById("tabs");
 let tabs = [];
 let currentTab = 0;
 
-const proxy = "https://your-worker.workers.dev";
+const proxy = "https://spring-shadow-dd89.awsomemathgamesteam.workers.dev/";
 
 // Create new tab
 function newTab(url = "https://example.com") {
