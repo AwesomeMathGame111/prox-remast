@@ -46,13 +46,24 @@ function go() {
     input = "https://www.google.com/search?q=" + encodeURIComponent(input);
   }
 
-  // 🔥 create proxied version
   const proxied = proxy + "/proxy/" + btoa(input);
 
-  // save tab
-  tabs[currentTab] = input;
+  // 🚫 known blocked sites
+  const blocked = [
+    "google.com",
+    "youtube.com",
+    "discord.com"
+  ];
 
-  // 🔥 use proxy with fallback
+  if (blocked.some(site => input.includes(site))) {
+    // 🔥 open directly instead of breaking
+    window.open(input, "_blank");
+    return;
+  }
+
+  tabs[currentTab] = input;
+  loadWithFallback(proxied, input);
+}
 function loadWithFallback(proxyUrl, originalUrl) {
   let failed = false;
 
