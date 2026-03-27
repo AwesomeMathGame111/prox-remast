@@ -4,9 +4,10 @@ const tabsDiv = document.getElementById("tabs");
 let tabs = [];
 let currentTab = 0;
 
+// 🔥 YOUR WORKER URL
 const proxy = "https://spring-shadow-dd89.awsomemathgamesteam.workers.dev/";
 
-// Create new tab
+// Create tab
 function newTab(url = "https://example.com") {
   tabs.push(url);
   currentTab = tabs.length - 1;
@@ -15,16 +16,16 @@ function newTab(url = "https://example.com") {
 }
 
 // Switch tab
-function switchTab(index) {
-  currentTab = index;
+function switchTab(i) {
+  currentTab = i;
   loadTab();
   renderTabs();
 }
 
-// Render tabs UI
+// Render tabs
 function renderTabs() {
   tabsDiv.innerHTML = "";
-  tabs.forEach((tab, i) => {
+  tabs.forEach((t, i) => {
     const el = document.createElement("div");
     el.className = "tab " + (i === currentTab ? "active" : "");
     el.innerText = "Tab " + (i + 1);
@@ -33,9 +34,11 @@ function renderTabs() {
   });
 }
 
-// Load current tab
+// Load tab with proxy
 function loadTab() {
-  frame.src = tabs[currentTab];
+  const url = tabs[currentTab];
+  const proxied = proxy + "/service/" + btoa(encodeURIComponent(url));
+  frame.src = proxied;
 }
 
 // Go button
@@ -43,57 +46,10 @@ function go() {
   let input = document.getElementById("urlInput").value.trim();
 
   if (!input.startsWith("http")) {
-    input = "https://www.google.com/search?q=" + encodeURIComponent(input);
-  }
-
-  const proxied = proxy + "/proxy/" + btoa(input);
-
-  // 🚫 known blocked sites
-  const blocked = [
-    "google.com",
-    "youtube.com",
-    "discord.com"
-  ];
-
-  if (blocked.some(site => input.includes(site))) {
-    // 🔥 open directly instead of breaking
-    window.open(input, "_blank");
-    return;
+    input =
+      "https://www.google.com/search?q=" + encodeURIComponent(input);
   }
 
   tabs[currentTab] = input;
-  loadWithFallback(proxied, input);
+  loadTab();
 }
-function loadWithFallback(proxyUrl, originalUrl) {
-  let failed = false;
-
-  frame.src = proxyUrl;
-
-  const timeout = setTimeout(() => {
-    failed = true;
-    window.open(originalUrl, "_blank");
-  }, 4000);
-
-  frame.onload = () => {
-    if (!failed) {
-      clearTimeout(timeout);
-    }
-  };
-}
-
-// Tab cloaking
-function cloak(type) {
-  if (type === "classroom") {
-    document.title = "Google Classroom";
-    document.getElementById("tabIcon").href =
-      "https://ssl.gstatic.com/classroom/favicon.png";
-  }
-  if (type === "docs") {
-    document.title = "Google Docs";
-    document.getElementById("tabIcon").href =
-      "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico";
-  }
-}
-
-// Start with one tab
-newTab();
